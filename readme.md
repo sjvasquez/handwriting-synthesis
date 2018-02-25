@@ -5,12 +5,18 @@ Below are a few hundred samples from the model, including some samples demonstra
 
 ## Demo #1
 The following samples were generated with a fixed style and fixed bias.
+
+**Smash Mouth – All Star (<a href="https://www.azlyrics.com/lyrics/smashmouth/allstar.html">lyrics</a>)**
 ![](img/all_star.svg)
 
 ## Demo #2
 The following samples were generated with varing style and fixed bias.  Each verse is generated in a different style.
+
+**Vanessa Carlton – A Thousand Miles (<a href="https://www.azlyrics.com/lyrics/vanessacarlton/athousandmiles.html">lyrics</a>)**
 ![](img/downtown.svg)
 
 ## Demo #3
 The following samples were generated with a fixed style and varying bias.  Each verse has a lower bias than the previous, with the last verse being unbiased.
-![](img/give_up.svg)
+
+**Leonard Cohen – Hallelujah (<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">lyrics</a>)
+![](img/give_up.svg)**
