@@ -95,8 +95,6 @@ class rnn(TFBaseModel):
             ],
             axis=-1
         )
-        pis = pis*(1 + self.bias)
-        sigmas = sigmas - self.bias
         pis = tf.nn.softmax(pis, axis=-1)
         sigmas = tf.clip_by_value(tf.exp(sigmas), sigma_eps, np.inf)
         rhos = tf.clip_by_value(tf.tanh(rhos), eps - 1.0, 1.0 - eps)
@@ -222,7 +220,7 @@ if __name__ == '__main__':
         validation_batch_size=32,
         optimizer='rms',
         num_training_steps=100000,
-        warm_start_init_step=11620,
+        warm_start_init_step=0,
         regularization_constant=0.0,
         keep_prob=1.0,
         enable_parameter_averaging=False,
