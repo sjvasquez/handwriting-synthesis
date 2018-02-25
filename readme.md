@@ -10,7 +10,7 @@ The following samples were generated with a fixed style and fixed bias.
 ![](img/all_star.svg)
 
 ## Demo #2
-The following samples were generated with varing style and fixed bias.  Each verse is generated in a different style.
+The following samples were generated with varying style and fixed bias.  Each verse is generated in a different style.
 
 **Vanessa Carlton – A Thousand Miles (<a href="https://www.azlyrics.com/lyrics/vanessacarlton/athousandmiles.html">lyrics</a>)**
 ![](img/downtown.svg)
