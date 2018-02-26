@@ -13,6 +13,6 @@ dependencies:
   - h5py
   - ipywidgets
   - svgwrite
-  - tensorflow=1.4.0
+  - tensorflow=1.5.0
   - scipy
   - scikit-learn
