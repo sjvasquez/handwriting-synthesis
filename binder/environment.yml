@@ -15,4 +15,4 @@ dependencies:
   - svgwrite
   - tensorflow=1.4.0
   - scipy
-  - sklearn
+  - scikit-learn
