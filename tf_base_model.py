@@ -64,6 +64,7 @@ class TFBaseModel(object):
         enable_parameter_averaging=False,
         min_steps_to_checkpoint=100,
         log_interval=20,
+        logging_level=logging.INFO,
         loss_averaging_window=100,
         validation_batch_size=64,
         log_dir='logs',
@@ -94,6 +95,7 @@ class TFBaseModel(object):
         self.validation_batch_size = validation_batch_size
 
         self.log_dir = log_dir
+        self.logging_level = logging_level
         self.prediction_dir = prediction_dir
         self.checkpoint_dir = checkpoint_dir
         if self.enable_parameter_averaging:
@@ -104,7 +106,7 @@ class TFBaseModel(object):
 
         self.graph = self.build_graph()
         self.session = tf.Session(graph=self.graph)
-        print 'built graph'
+        logging.info('built graph')
 
     def update_train_params(self):
         self.batch_size = self.batch_sizes[self.restart_idx]
@@ -338,7 +340,7 @@ class TFBaseModel(object):
         reload(logging)  # bad
         logging.basicConfig(
             filename=os.path.join(log_dir, log_file),
-            level=logging.INFO,
+            level=self.logging_level,
             format='[[%(asctime)s]] %(message)s',
             datefmt='%m/%d/%Y %I:%M:%S %p'
         )
