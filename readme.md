@@ -1,5 +1,6 @@
 # Handwriting Synthesis
-Implementation of the handwriting synthesis experiments in the paper <a href="https://arxiv.org/abs/1308.0850">Generating Sequences with Recurrent Neural Networks</a> by Alex Graves.  The implementation very closely follows the original paper, with a few slight deviations, and the generated samples are of similar quality to those presented in the paper.
+![](img/banner.svg)
+Implementation of the handwriting synthesis experiments in the paper <a href="https://arxiv.org/abs/1308.0850">Generating Sequences with Recurrent Neural Networks</a> by Alex Graves.  The implementation closely follows the original paper, with a few slight deviations, and the generated samples are of similar quality to those presented in the paper.
 
 ## Usage
 ```python
@@ -48,12 +49,11 @@ The following samples were generated with varying style and fixed bias.  Each ve
 ### Demo #3
 The following samples were generated with a fixed style and varying bias.  Each verse has a lower bias than the previous, with the last verse being unbiased.
 
-**Leonard Cohen – Hallelujah (<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">lyrics</a>)
-![](img/give_up.svg)**
+**Leonard Cohen – Hallelujah (<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">lyrics</a>)**
+![](img/give_up.svg)
 
 ## Contribute
-This project was intended to serve as a reference implementation for a research paper, but since the results are of decent quality, it may worthwile to make the project more broadly usable.  I plan to continue focusing on the machine learning side of things.  That said, I'd welcome contributors who can:
+This project was intended to serve as a reference implementation for a research paper, but since the results are of decent quality, it may be worthwile to make the project more broadly usable.  I plan to continue focusing on the machine learning side of things.  That said, I'd welcome contributors who can:
 
   - Package this, and otherwise make it look more like a usable software project and less like research code.
   - Add support for more sophisticated drawing, animations, or anything else in this direction.  Currently, the project only creates some simple svg files.
-

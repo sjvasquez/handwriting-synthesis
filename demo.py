@@ -159,7 +159,7 @@ if __name__ == '__main__':
     styles = [12 for i in lines]
 
     hand.write(
-        filename='img/all_star2.svg',
+        filename='img/all_star.svg',
         lines=lines,
         biases=biases,
         styles=styles,
@@ -171,7 +171,7 @@ if __name__ == '__main__':
     styles = np.cumsum(np.array([len(i) for i in lines]) == 0).astype(int)
 
     hand.write(
-        filename='img/downtown2.svg',
+        filename='img/downtown.svg',
         lines=lines,
         biases=biases,
         styles=styles,
@@ -183,7 +183,7 @@ if __name__ == '__main__':
     styles = [7 for i in lines]
 
     hand.write(
-        filename='img/give_up2.svg',
+        filename='img/give_up.svg',
         lines=lines,
         biases=biases,
         styles=styles,
