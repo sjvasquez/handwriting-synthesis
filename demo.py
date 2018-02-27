@@ -39,6 +39,25 @@ class Hand(object):
         self.nn.restore()
 
     def write(self, filename, lines, biases=None, styles=None, stroke_colors=None, stroke_widths=None):
+        valid_char_set = set(drawing.alphabet)
+        for line_num, line in enumerate(lines):
+            if len(line) > 75:
+                raise ValueError(
+                    (
+                        "Each line must be at most 75 characters. "
+                        "Line {} contains {}"
+                    ).format(line_num, len(line))
+                )
+
+            for char in line:
+                if char not in valid_char_set:
+                    raise ValueError(
+                        (
+                            "Invalid character {} detected in line {}. "
+                            "Valid character set is {}"
+                        ).format(char, line_num, valid_char_set)
+                    )
+
         strokes = self._sample(lines, biases=biases, styles=styles)
         self._draw(strokes, lines, filename, stroke_colors=stroke_colors, stroke_widths=stroke_widths)
 
@@ -49,7 +68,7 @@ class Hand(object):
 
         x_prime = np.zeros([num_samples, 1200, 3])
         x_prime_len = np.zeros([num_samples])
-        chars = np.zeros([num_samples, 100])
+        chars = np.zeros([num_samples, 120])
         chars_len = np.zeros([num_samples])
 
         if styles is not None:
