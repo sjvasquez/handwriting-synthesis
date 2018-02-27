@@ -16,8 +16,8 @@ alphabet = [
     'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
     'y', 'z'
 ]
-alphabet_ord = map(ord, alphabet)
-alpha_to_num = defaultdict(int, map(reversed, enumerate(alphabet)))
+alphabet_ord = list(map(ord, alphabet))
+alpha_to_num = defaultdict(int, list(map(reversed, enumerate(alphabet))))
 num_to_alpha = dict(enumerate(alphabet_ord))
 
 MAX_STROKE_LEN = 1200
@@ -74,7 +74,7 @@ def encode_ascii(ascii_string):
     """
     encodes ascii string to array of ints
     """
-    return np.array(map(lambda x: alpha_to_num[x], ascii_string) + [0])
+    return np.array(list(map(lambda x: alpha_to_num[x], ascii_string)) + [0])
 
 
 def denoise(coords):
@@ -205,7 +205,7 @@ def draw(
 
     if ascii_seq is not None:
         if not isinstance(ascii_seq, str):
-            ascii_seq = ''.join(map(chr, ascii_seq))
+            ascii_seq = ''.join(list(map(chr, ascii_seq)))
         plt.title(ascii_seq)
 
     if save_file is not None:
