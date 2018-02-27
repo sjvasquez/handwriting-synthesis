@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 
 import numpy as np
@@ -20,9 +21,9 @@ class DataReader(object):
         self.test_df = DataFrame(columns=data_cols, data=data)
         self.train_df, self.val_df = self.test_df.train_test_split(train_size=0.95, random_state=2018)
 
-        print 'train size', len(self.train_df)
-        print 'val size', len(self.val_df)
-        print 'test size', len(self.test_df)
+        print('train size', len(self.train_df))
+        print('val size', len(self.val_df))
+        print('test size', len(self.test_df))
 
     def train_batch_generator(self, batch_size):
         return self.batch_generator(

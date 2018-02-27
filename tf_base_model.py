@@ -1,3 +1,4 @@
+from __future__ import print_function
 from collections import deque
 from datetime import datetime
 import logging
@@ -146,7 +147,7 @@ class TFBaseModel(object):
 
                 # validation evaluation
                 val_start = time.time()
-                val_batch_df = val_generator.next()
+                val_batch_df = next(val_generator)
                 val_feed_dict = {
                     getattr(self, placeholder_name, None): data
                     for placeholder_name, data in val_batch_df.items() if hasattr(self, placeholder_name)
@@ -173,19 +174,19 @@ class TFBaseModel(object):
                 if hasattr(self, 'monitor_tensors'):
                     for name, tensor in self.monitor_tensors.items():
                         [np_val] = self.session.run([tensor], feed_dict=val_feed_dict)
-                        print name
-                        print 'min', np_val.min()
-                        print 'max', np_val.max()
-                        print 'mean', np_val.mean()
-                        print 'std', np_val.std()
-                        print 'nans', np.isnan(np_val).sum()
-                        print
-                    print
-                    print
+                        print(name)
+                        print('min', np_val.min())
+                        print('max', np_val.max())
+                        print('mean', np_val.mean())
+                        print('std', np_val.std())
+                        print('nans', np.isnan(np_val).sum())
+                        print()
+                    print()
+                    print()
 
                 # train step
                 train_start = time.time()
-                train_batch_df = train_generator.next()
+                train_batch_df = next(train_generator)
                 train_feed_dict = {
                     getattr(self, placeholder_name, None): data
                     for placeholder_name, data in train_batch_df.items() if hasattr(self, placeholder_name)
@@ -272,7 +273,7 @@ class TFBaseModel(object):
             test_generator = self.reader.test_batch_generator(chunk_size)
             for i, test_batch_df in enumerate(test_generator):
                 if i % 10 == 0:
-                    print i*len(test_batch_df)
+                    print(i*len(test_batch_df))
 
                 test_feed_dict = {
                     getattr(self, placeholder_name, None): data
@@ -337,7 +338,10 @@ class TFBaseModel(object):
         date_str = datetime.now().strftime('%Y-%m-%d_%H-%M')
         log_file = 'log_{}.txt'.format(date_str)
 
-        reload(logging)  # bad
+        try:                 # Python 2
+            reload(logging)  # bad
+        except NameError:    # Python 3
+            import logging
         logging.basicConfig(
             filename=os.path.join(log_dir, log_file),
             level=self.logging_level,

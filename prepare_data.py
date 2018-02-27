@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 from xml.etree import ElementTree
 
@@ -54,7 +55,7 @@ def collect_data():
 
     stroke_fnames, transcriptions, writer_ids = [], [], []
     for i, fname in enumerate(fnames):
-        print i, fname
+        print(i, fname)
         if fname == 'data/raw/ascii/z01/z01-000/z01-000z.txt':
             continue
 
@@ -98,10 +99,10 @@ def collect_data():
 
 
 if __name__ == '__main__':
-    print 'traversing data directory...'
+    print('traversing data directory...')
     stroke_fnames, transcriptions, writer_ids = collect_data()
 
-    print 'dumping to numpy arrays...'
+    print('dumping to numpy arrays...')
     x = np.zeros([len(stroke_fnames), drawing.MAX_STROKE_LEN, 3], dtype=np.float32)
     x_len = np.zeros([len(stroke_fnames)], dtype=np.int16)
     c = np.zeros([len(stroke_fnames), drawing.MAX_CHAR_LEN], dtype=np.int8)
@@ -111,7 +112,7 @@ if __name__ == '__main__':
 
     for i, (stroke_fname, c_i, w_id_i) in enumerate(zip(stroke_fnames, transcriptions, writer_ids)):
         if i % 200 == 0:
-            print i, '\t', '/', len(stroke_fnames)
+            print(i, '\t', '/', len(stroke_fnames))
         x_i = get_stroke_sequence(stroke_fname)
         valid_mask[i] = ~np.any(np.linalg.norm(x_i[:, :2], axis=1) > 60)
 
