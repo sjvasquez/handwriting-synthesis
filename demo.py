@@ -153,6 +153,7 @@ if __name__ == '__main__':
         stroke_colors=stroke_colors,
         stroke_widths=stroke_widths
     )
+    print('img/usage_demo.svg written...')
 
     # demo number 1 - fixed bias, fixed style
     lines = lyrics.all_star.split("\n")
@@ -165,6 +166,7 @@ if __name__ == '__main__':
         biases=biases,
         styles=styles,
     )
+    print('img/all_star.svg written...')
 
     # demo number 2 - fixed bias, varying style
     lines = lyrics.downtown.split("\n")
@@ -177,6 +179,7 @@ if __name__ == '__main__':
         biases=biases,
         styles=styles,
     )
+    print('img/downtown.svg written...')
 
     # demo number 3 - varying bias, fixed style
     lines = lyrics.give_up.split("\n")
@@ -189,3 +192,4 @@ if __name__ == '__main__':
         biases=biases,
         styles=styles,
     )
+    print('img/give_up.svg written.  Done.')
