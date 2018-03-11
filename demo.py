@@ -74,7 +74,7 @@ class Hand(object):
         if styles is not None:
             for i, (cs, style) in enumerate(zip(lines, styles)):
                 x_p = np.load('styles/style-{}-strokes.npy'.format(style))
-                c_p = np.load('styles/style-{}-chars.npy'.format(style))
+                c_p = np.load('styles/style-{}-chars.npy'.format(style)).tostring().decode('utf-8')
 
                 c_p = str(c_p) + " " + cs
                 c_p = drawing.encode_ascii(c_p)
