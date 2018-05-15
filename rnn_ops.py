@@ -1,16 +1,16 @@
 from tensorflow.python.framework import constant_op
 from tensorflow.python.framework import dtypes
 from tensorflow.python.framework import ops
+from tensorflow.python.framework import tensor_shape
 from tensorflow.python.ops import array_ops
 from tensorflow.python.ops import control_flow_ops
 from tensorflow.python.ops import math_ops
 from tensorflow.python.ops import tensor_array_ops
 from tensorflow.python.ops import variable_scope as vs
-from tensorflow.python.ops.rnn_cell_impl import _concat, _like_rnncell
 from tensorflow.python.ops.rnn import _maybe_tensor_shape_from_tensor
+from tensorflow.python.ops.rnn_cell_impl import _concat, _like_rnncell
+from tensorflow.python.util import is_in_graph_mode
 from tensorflow.python.util import nest
-from tensorflow.python.framework import tensor_shape
-from tensorflow.python.eager import context
 
 
 def raw_rnn(cell, loop_fn, parallel_iterations=None, swap_memory=False, scope=None):
@@ -37,7 +37,7 @@ def raw_rnn(cell, loop_fn, parallel_iterations=None, swap_memory=False, scope=No
     # determined by the parent scope, or is set to place the cached
     # Variable using the same placement as for the rest of the RNN.
     with vs.variable_scope(scope or "rnn") as varscope:
-        if context.in_graph_mode():
+        if is_in_graph_mode:
             if varscope.caching_device is None:
                 varscope.set_caching_device(lambda op: op.device)
 
@@ -136,6 +136,7 @@ def raw_rnn(cell, loop_fn, parallel_iterations=None, swap_memory=False, scope=No
 
             def _copy_some_through(current, candidate):
                 """Copy some tensors through via array_ops.where."""
+
                 def copy_fn(cur_i, cand_i):
                     # TensorArray and scalar get passed through.
                     if isinstance(cur_i, tensor_array_ops.TensorArray):
@@ -145,6 +146,7 @@ def raw_rnn(cell, loop_fn, parallel_iterations=None, swap_memory=False, scope=No
                     # Otherwise propagate the old or the new value.
                     with ops.colocate_with(cand_i):
                         return array_ops.where(elements_finished, cur_i, cand_i)
+
                 return nest.map_structure(copy_fn, current, candidate)
 
             emit_output = _copy_some_through(zero_emit, emit_output)
