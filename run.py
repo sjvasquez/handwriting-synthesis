@@ -41,7 +41,8 @@ class HandwriteCLI():
             help='Supply text to handwrite.' + text_warning)
 
         parser.add_argument('--color', nargs='?', default=color, \
-            help='Choose color. Defaults to {}.'.format(color))
+            help='Choose color. Defaults to {}. Available colors are SVG color names, \
+                 "none" for transparent, or hex codes in the format "#000000"'.format(color))
 
         parser.add_argument('--bias', type=float, nargs='?', default=bias, \
             help='Choose bias between 0 and 1. Defaults to {}.'.format(bias))
