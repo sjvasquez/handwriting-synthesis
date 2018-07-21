@@ -18,6 +18,7 @@ class HandwriteCLI():
         # Default values
         outfile = 'output.svg'
         color = 'black'
+        background_color = 'none'
         bias = 0.5
         style = 0
         width = 1
@@ -40,9 +41,12 @@ class HandwriteCLI():
         input_group.add_argument('--text', nargs='?', default=None, \
             help='Supply text to handwrite.' + text_warning)
 
+        color_warning = 'Available colors are SVG color names, \
+             "none" for transparent, or hex codes in the format "#000000".'
         parser.add_argument('--color', nargs='?', default=color, \
-            help='Choose color. Defaults to {}. Available colors are SVG color names, \
-                 "none" for transparent, or hex codes in the format "#000000"'.format(color))
+            help='Choose color. Defaults to {}. {}'.format(color, color_warning))
+        parser.add_argument('--bgcolor', nargs='?', default=background_color, \
+            help='Choose background color. Defaults to {}. {}'.format(background_color, color_warning))
 
         parser.add_argument('--bias', type=float, nargs='?', default=bias, \
             help='Choose bias between 0 and 1. Defaults to {}.'.format(bias))
@@ -54,7 +58,7 @@ class HandwriteCLI():
             help='Choose stroke width between 1 and 5 inclusive. Defaults to {}.'.format(width))
 
         parser.add_argument('--silent', default=False, action='store_true', \
-            help='Suppress output to terminal. Defaults to false')
+            help='Suppress output to terminal. Defaults to false.')
 
         args = parser.parse_args()
         return args
@@ -86,6 +90,7 @@ class HandwriteCLI():
             styles=styles,
             stroke_colors=stroke_colors,
             stroke_widths=stroke_widths,
+            background_color=self.args.bgcolor
         )
 
     def print_report(self):
@@ -94,7 +99,8 @@ class HandwriteCLI():
         else:
             input_str = 'Supplied text'
         print('''{input_str} written to {self.args.outfile}.
-Color {self.args.color}, style {self.args.style}, bias {self.args.bias}, width {self.args.width}.
+Color {self.args.color}, background color {self.args.bgcolor},
+style {self.args.style}, bias {self.args.bias}, width {self.args.width}.
 -h for more information.'''.format(**locals()))
 
 if __name__ == '__main__':
