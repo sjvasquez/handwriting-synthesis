@@ -4,13 +4,13 @@ Implementation of the handwriting synthesis experiments in the paper <a href="ht
 
 ## Usage
 
-###Via CLI
+Via CLI
 ```bash
 python3 run.py --text "Phrase to be handwritten"
 python3 run.py --infile input.txt --outfile output.svg --color black --bgcolor "#FFFFFF" --style 5 --width 1 --bias 0.5
 ```
 
-###Via script
+Via script
 ```python
 lines = [
     "Now this is a story all about how",
