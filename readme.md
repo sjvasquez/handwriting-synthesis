@@ -3,6 +3,14 @@
 Implementation of the handwriting synthesis experiments in the paper <a href="https://arxiv.org/abs/1308.0850">Generating Sequences with Recurrent Neural Networks</a> by Alex Graves.  The implementation closely follows the original paper, with a few slight deviations, and the generated samples are of similar quality to those presented in the paper.
 
 ## Usage
+
+###Via CLI
+```bash
+python3 run.py --text "Phrase to be handwritten"
+python3 run.py --infile input.txt --outfile output.svg --color black --bgcolor "#FFFFFF" --style 5 --width 1 --bias 0.5
+```
+
+###Via script
 ```python
 lines = [
     "Now this is a story all about how",
@@ -25,6 +33,7 @@ hand.write(
     stroke_widths=stroke_widths
 )
 ```
+
 ![](img/usage_demo.svg)
 
 Currently, the `Hand` class must be imported from `demo.py`.  If someone would like to package this project to make it more usable, please [contribute](#contribute).
