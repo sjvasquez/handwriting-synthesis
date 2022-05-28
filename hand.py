@@ -1,17 +1,21 @@
+import warnings
+warnings.filterwarnings(action='ignore', category=FutureWarning)
+
 import os
 import logging
+import warnings
 
 import numpy as np
 import svgwrite
 
 import drawing
-import lyrics
 from rnn import rnn
 
 
 class Hand(object):
 
     def __init__(self):
+        warnings.filterwarnings("ignore", message=r"Passing", category=FutureWarning)
         os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
         self.nn = rnn(
             log_dir='logs',
@@ -59,7 +63,8 @@ class Hand(object):
                     )
 
         strokes = self._sample(lines, biases=biases, styles=styles)
-        self._draw(strokes, lines, filename, stroke_colors=stroke_colors, stroke_widths=stroke_widths)
+        self._draw(strokes, lines, filename,
+                   stroke_colors=stroke_colors, stroke_widths=stroke_widths)
 
     def _sample(self, lines, biases=None, styles=None):
         num_samples = len(lines)
@@ -74,7 +79,8 @@ class Hand(object):
         if styles is not None:
             for i, (cs, style) in enumerate(zip(lines, styles)):
                 x_p = np.load('styles/style-{}-strokes.npy'.format(style))
-                c_p = np.load('styles/style-{}-chars.npy'.format(style)).tostring().decode('utf-8')
+                c_p = np.load('styles/style-{}-chars.npy'.format(style)
+                              ).tostring().decode('utf-8')
 
                 c_p = str(c_p) + " " + cs
                 c_p = drawing.encode_ascii(c_p)
@@ -104,7 +110,8 @@ class Hand(object):
                 self.nn.bias: biases
             }
         )
-        samples = [sample[~np.all(sample == 0.0, axis=1)] for sample in samples]
+        samples = [sample[~np.all(sample == 0.0, axis=1)]
+                   for sample in samples]
         return samples
 
     def _draw(self, strokes, lines, filename, stroke_colors=None, stroke_widths=None):
@@ -117,7 +124,8 @@ class Hand(object):
 
         dwg = svgwrite.Drawing(filename=filename)
         dwg.viewbox(width=view_width, height=view_height)
-        dwg.add(dwg.rect(insert=(0, 0), size=(view_width, view_height), fill='white'))
+        dwg.add(dwg.rect(insert=(0, 0), size=(
+            view_width, view_height), fill='white'))
 
         initial_coord = np.array([0, -(3*line_height / 4)])
         for offsets, line, color, width in zip(strokes, lines, stroke_colors, stroke_widths):
@@ -141,70 +149,10 @@ class Hand(object):
                 p += '{}{},{} '.format('M' if prev_eos == 1.0 else 'L', x, y)
                 prev_eos = eos
             path = svgwrite.path.Path(p)
-            path = path.stroke(color=color, width=width, linecap='round').fill("none")
+            path = path.stroke(color=color, width=width,
+                               linecap='round').fill("none")
             dwg.add(path)
 
             initial_coord[1] -= line_height
 
         dwg.save()
-
-
-if __name__ == '__main__':
-    hand = Hand()
-
-    # usage demo
-    lines = [
-        "Now this is a story all about how",
-        "My life got flipped turned upside down",
-        "And I'd like to take a minute, just sit right there",
-        "I'll tell you how I became the prince of a town called Bel-Air",
-    ]
-    biases = [.75 for i in lines]
-    styles = [9 for i in lines]
-    stroke_colors = ['red', 'green', 'black', 'blue']
-    stroke_widths = [1, 2, 1, 2]
-
-    hand.write(
-        filename='img/usage_demo.svg',
-        lines=lines,
-        biases=biases,
-        styles=styles,
-        stroke_colors=stroke_colors,
-        stroke_widths=stroke_widths
-    )
-
-    # demo number 1 - fixed bias, fixed style
-    lines = lyrics.all_star.split("\n")
-    biases = [.75 for i in lines]
-    styles = [12 for i in lines]
-
-    hand.write(
-        filename='img/all_star.svg',
-        lines=lines,
-        biases=biases,
-        styles=styles,
-    )
-
-    # demo number 2 - fixed bias, varying style
-    lines = lyrics.downtown.split("\n")
-    biases = [.75 for i in lines]
-    styles = np.cumsum(np.array([len(i) for i in lines]) == 0).astype(int)
-
-    hand.write(
-        filename='img/downtown.svg',
-        lines=lines,
-        biases=biases,
-        styles=styles,
-    )
-
-    # demo number 3 - varying bias, fixed style
-    lines = lyrics.give_up.split("\n")
-    biases = .2*np.flip(np.cumsum([len(i) == 0 for i in lines]), 0)
-    styles = [7 for i in lines]
-
-    hand.write(
-        filename='img/give_up.svg',
-        lines=lines,
-        biases=biases,
-        styles=styles,
-    )
