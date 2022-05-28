@@ -14,6 +14,7 @@ if __name__ == '__main__':
         "Begets source",
         "Begets source"
     ]
+    
     biases = [.75 for i in lines]
     styles = [5 for i in lines]
     stroke_colors = ['black' for i in lines]
@@ -25,5 +26,6 @@ if __name__ == '__main__':
         biases=biases,
         styles=styles,
         stroke_colors=stroke_colors,
-        stroke_widths=stroke_widths
+        stroke_widths=stroke_widths,
+        output_png=True
     )
