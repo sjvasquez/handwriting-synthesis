@@ -38,7 +38,8 @@ if __name__ == '__main__':
         biases=biases,
         styles=styles,
         stroke_colors=stroke_colors,
-        stroke_widths=stroke_widths
+        stroke_widths=stroke_widths,
+        output_png=False
     )
 ```
 
