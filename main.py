@@ -28,5 +28,6 @@ if __name__ == '__main__':
         stroke_colors=stroke_colors,
         stroke_widths=stroke_widths,
         center_align=False,
+        line_height=50,
         output_png=True
     )
