@@ -43,7 +43,7 @@ class Hand(object):
         )
         self.nn.restore()
 
-    def write(self, filename, lines, biases=None, styles=None, stroke_colors=None, stroke_widths=None, output_png=False):
+    def write(self, filename, lines, biases=None, styles=None, stroke_colors=None, stroke_widths=None, center_align=False, output_png=False):
         valid_char_set = set(drawing.alphabet)
         for line_num, line in enumerate(lines):
             if len(line) > 75:
@@ -65,7 +65,7 @@ class Hand(object):
 
         strokes = self._sample(lines, biases=biases, styles=styles)
         self._draw(strokes, lines, filename,
-                   stroke_colors=stroke_colors, stroke_widths=stroke_widths, output_png=output_png)
+                   stroke_colors=stroke_colors, stroke_widths=stroke_widths, center_align=center_align, output_png=output_png)
 
     def _sample(self, lines, biases=None, styles=None):
         num_samples = len(lines)
@@ -115,7 +115,7 @@ class Hand(object):
                    for sample in samples]
         return samples
 
-    def _draw(self, strokes, lines, filename, stroke_colors=None, stroke_widths=None, output_png=False):
+    def _draw(self, strokes, lines, filename, stroke_colors=None, stroke_widths=None, center_align=False, output_png=False):
         stroke_colors = stroke_colors or ['black']*len(lines)
         stroke_widths = stroke_widths or [2]*len(lines)
 
@@ -142,7 +142,9 @@ class Hand(object):
 
             strokes[:, 1] *= -1
             strokes[:, :2] -= strokes[:, :2].min() + initial_coord
-            strokes[:, 0] += (view_width - strokes[:, 0].max()) / 2
+            
+            if center_align == True:
+                strokes[:, 0] += (view_width - strokes[:, 0].max()) / 2
 
             prev_eos = 1.0
             p = "M{},{} ".format(0, 0)

@@ -33,7 +33,7 @@ if __name__ == '__main__':
     stroke_widths = [1 for i in lines]
     
     hand.write(
-        filename='img/source.svg',
+        filename='img/out/source.svg',
         lines=lines,
         biases=biases,
         styles=styles,

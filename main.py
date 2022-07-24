@@ -27,5 +27,6 @@ if __name__ == '__main__':
         styles=styles,
         stroke_colors=stroke_colors,
         stroke_widths=stroke_widths,
+        center_align=False,
         output_png=True
     )
