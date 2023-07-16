@@ -46,3 +46,28 @@ if __name__ == '__main__':
 ## Output
 
 ![](./img/source.svg)
+
+## Docker
+
+This application requires Tensorflow 1.6. If you want to skip the painful process of installing an old version of Tensorflow, use the prebuilt Tensorflow Docker-image instead.
+
+Clone poetai:
+
+sudo apt install git -y
+git clone https://github.com/rickevry/poetai-docker.git
+cd poetai-docker
+
+Build docker-file:
+
+sudo docker build -t poetai .
+
+Run container:
+
+sudo docker run -it --rm poetai bash
+
+When you are inside the container, run: 
+
+python main.py
+
+Then check the img-folder
+
