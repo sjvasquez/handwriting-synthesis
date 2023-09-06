@@ -47,7 +47,7 @@ def collect_data():
         for filename in filenames:
             if filename.startswith('.'):
                 continue
-            fnames.append(os.path.join(dirpath, filename))
+            fnames.append(os.path.join(dirpath, filename).replace('\\', '/'))
 
     # low quality samples (selected by collecting samples to
     # which the trained model assigned very low likelihood)
