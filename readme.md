@@ -5,6 +5,9 @@ Implementation of the handwriting synthesis experiments in the paper <a href="ht
 Web demo is available <a href="https://seanvasquez.com/handwriting-generation/">here</a>.
 
 ## Usage
+Use python 3.6.8 and ensure packages from `requirements.txt` are installed. You can launch the GUI with `gui.py`
+![](img/GUIimage.png)
+or use the Hand class from demo.py as seen below
 ```python
 lines = [
     "Now this is a story all about how",
