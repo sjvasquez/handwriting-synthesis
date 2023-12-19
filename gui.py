@@ -200,7 +200,7 @@ class MyWindow:
                 if not line == '':
                     synthesized_lines.append(line)
                 else:
-                    synthesized_lines.append('   ')
+                    synthesized_lines.append(' ')
                 
         proglength = 60/len(synthesized_lines)
         time.sleep(0.5)
@@ -226,7 +226,10 @@ class MyWindow:
         
         for i in range(len(synthesized_lines)):
             self.generatelabel.config(text=f'Rasterizing Lines({i+1}/{len(synthesized_lines)})')
-            svg2png(resourcepath(f'handsynth-temp/{i}.svg'), resourcepath(f'handsynth-temp/{i}.png'))
+            if synthesized_lines[i] == ' ':
+                Image.new('RGBA',(2_000 ,120)).save(resourcepath(f'handsynth-temp/{i}.png'))
+            else:
+                svg2png(resourcepath(f'handsynth-temp/{i}.svg'), resourcepath(f'handsynth-temp/{i}.png'))
             Thread(target=lambda: self.step_bar(self.progress, proglength)).start()
         
         line_spacing = round(self.lineheightscale.get()) 
