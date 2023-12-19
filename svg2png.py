@@ -5,7 +5,11 @@ Created on Mon Dec 18 19:22:03 2023
 @author: skynet
 """
 from PIL import Image, ImageDraw, ImageChops
-
+# =========================================================
+#                      WARNING!!!
+# This code is awful and hacked together for this specific
+#   use-case. Please do not use it outside of this GUI!
+# =========================================================
 def trimsides(im):
     bg = Image.new(im.mode, im.size, im.getpixel((0,0)))
     diff = ImageChops.difference(im, bg)
