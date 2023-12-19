@@ -20,6 +20,7 @@ import shutil
 import string
 import random
 from resourcepath import resourcepath
+import textwrap
 
 class MyWindow:
     def __init__(self, win):
@@ -150,23 +151,7 @@ class MyWindow:
             bar.step(amount)
             
     def split_string(self, text, length) -> list:
-        words = text.split()
-        result = []
-        current = ''
-        for word in words:
-            if len(word) > length:
-                result.append(word[:length])
-                word = word[length:]
-            if len(current + word) > length:
-                result.append(current.strip())
-                current = ''
-            current += word + ' '
-        result.append(current.strip())
-        final = []
-        for item in result:
-            if not item == '':
-                final.append(item)
-        return final
+        return textwrap.wrap(text,length)
    
     def generate_writing(self):
         print('Writing Started')
