@@ -105,7 +105,7 @@ class MyWindow:
     
     def generate_dialog(self, win):
         self.generatebutton.config(state='disabled')
-        self.text = self.inputtext.get("1.0", tk.END).replace('Q', 'q')
+        self.text = self.inputtext.get("1.0", tk.END).replace('Q', 'q').replace('X', 'x')
         print(self.text)
         if len("".join(self.text.split())) == 0:
             print('No text inputted!')
