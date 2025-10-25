@@ -1,4 +1,8 @@
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+
+tf.disable_v2_behavior()
+
+from tensorflow.keras import initializers
 
 
 def dense_layer(inputs, output_units, bias=True, activation=None, batch_norm=None,
@@ -17,7 +21,7 @@ def dense_layer(inputs, output_units, bias=True, activation=None, batch_norm=Non
     with tf.variable_scope(scope, reuse=reuse):
         W = tf.get_variable(
             name='weights',
-            initializer=tf.contrib.layers.variance_scaling_initializer(),
+            initializer=initializers.VarianceScaling(),
             shape=[shape(inputs, -1), output_units]
         )
         z = tf.matmul(inputs, W)
@@ -33,7 +37,7 @@ def dense_layer(inputs, output_units, bias=True, activation=None, batch_norm=Non
             z = tf.layers.batch_normalization(z, training=batch_norm, reuse=reuse)
 
         z = activation(z) if activation else z
-        z = tf.nn.dropout(z, dropout) if dropout is not None else z
+        z = tf.nn.dropout(z, keep_prob=dropout) if dropout is not None else z
         return z
 
 
@@ -57,7 +61,7 @@ def time_distributed_dense_layer(
     with tf.variable_scope(scope, reuse=reuse):
         W = tf.get_variable(
             name='weights',
-            initializer=tf.contrib.layers.variance_scaling_initializer(),
+            initializer=initializers.VarianceScaling(),
             shape=[shape(inputs, -1), output_units]
         )
         z = tf.einsum('ijk,kl->ijl', inputs, W)
@@ -73,7 +77,7 @@ def time_distributed_dense_layer(
             z = tf.layers.batch_normalization(z, training=batch_norm, reuse=reuse)
 
         z = activation(z) if activation else z
-        z = tf.nn.dropout(z, dropout) if dropout is not None else z
+        z = tf.nn.dropout(z, keep_prob=dropout) if dropout is not None else z
         return z
 
 

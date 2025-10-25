@@ -38,8 +38,19 @@ class Hand(object):
         )
         self.nn.restore()
 
-    def write(self, filename, lines, biases=None, styles=None, stroke_colors=None, stroke_widths=None):
+    def write(
+        self,
+        filename,
+        lines,
+        biases=None,
+        styles=None,
+        stroke_colors=None,
+        stroke_widths=None,
+        alignment="center",
+    ):
         valid_char_set = set(drawing.alphabet)
+        if alignment not in {"left", "center"}:
+            raise ValueError("Alignment must be either 'left' or 'center'.")
         for line_num, line in enumerate(lines):
             if len(line) > 75:
                 raise ValueError(
@@ -59,7 +70,14 @@ class Hand(object):
                     )
 
         strokes = self._sample(lines, biases=biases, styles=styles)
-        self._draw(strokes, lines, filename, stroke_colors=stroke_colors, stroke_widths=stroke_widths)
+        self._draw(
+            strokes,
+            lines,
+            filename,
+            stroke_colors=stroke_colors,
+            stroke_widths=stroke_widths,
+            alignment=alignment,
+        )
 
     def _sample(self, lines, biases=None, styles=None):
         num_samples = len(lines)
@@ -74,7 +92,7 @@ class Hand(object):
         if styles is not None:
             for i, (cs, style) in enumerate(zip(lines, styles)):
                 x_p = np.load('styles/style-{}-strokes.npy'.format(style))
-                c_p = np.load('styles/style-{}-chars.npy'.format(style)).tostring().decode('utf-8')
+                c_p = np.load('styles/style-{}-chars.npy'.format(style)).tobytes().decode('utf-8')
 
                 c_p = str(c_p) + " " + cs
                 c_p = drawing.encode_ascii(c_p)
@@ -107,7 +125,15 @@ class Hand(object):
         samples = [sample[~np.all(sample == 0.0, axis=1)] for sample in samples]
         return samples
 
-    def _draw(self, strokes, lines, filename, stroke_colors=None, stroke_widths=None):
+    def _draw(
+        self,
+        strokes,
+        lines,
+        filename,
+        stroke_colors=None,
+        stroke_widths=None,
+        alignment="center",
+    ):
         stroke_colors = stroke_colors or ['black']*len(lines)
         stroke_widths = stroke_widths or [2]*len(lines)
 
@@ -133,7 +159,11 @@ class Hand(object):
 
             strokes[:, 1] *= -1
             strokes[:, :2] -= strokes[:, :2].min() + initial_coord
-            strokes[:, 0] += (view_width - strokes[:, 0].max()) / 2
+            if alignment == "center":
+                strokes[:, 0] += (view_width - strokes[:, 0].max()) / 2
+            else:
+                left_padding = 60
+                strokes[:, 0] += left_padding
 
             prev_eos = 1.0
             p = "M{},{} ".format(0, 0)

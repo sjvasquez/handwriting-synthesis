@@ -2,7 +2,7 @@ from __future__ import print_function
 import os
 
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 import drawing
 from data_frame import DataFrame
@@ -10,6 +10,9 @@ from rnn_cell import LSTMAttentionCell
 from rnn_ops import rnn_free_run
 from tf_base_model import TFBaseModel
 from tf_utils import time_distributed_dense_layer
+
+
+tf.disable_v2_behavior()
 
 
 class DataReader(object):

@@ -1,16 +1,23 @@
+import tensorflow.compat.v1 as tf
 from tensorflow.python.framework import constant_op
 from tensorflow.python.framework import dtypes
 from tensorflow.python.framework import ops
 from tensorflow.python.ops import array_ops
-from tensorflow.python.ops import control_flow_ops
 from tensorflow.python.ops import math_ops
 from tensorflow.python.ops import tensor_array_ops
 from tensorflow.python.ops import variable_scope as vs
-from tensorflow.python.ops.rnn_cell_impl import _concat, _like_rnncell
+from tensorflow.python.ops.rnn_cell_impl import _concat
 from tensorflow.python.ops.rnn import _maybe_tensor_shape_from_tensor
 from tensorflow.python.util import nest
 from tensorflow.python.framework import tensor_shape
 from tensorflow.python.eager import context
+
+tf.disable_v2_behavior()
+
+
+def _is_rnn_cell(cell):
+    required_attrs = ("state_size", "output_size")
+    return all(hasattr(cell, attr) for attr in required_attrs) and callable(cell)
 
 
 def raw_rnn(cell, loop_fn, parallel_iterations=None, swap_memory=False, scope=None):
@@ -26,7 +33,7 @@ def raw_rnn(cell, loop_fn, parallel_iterations=None, swap_memory=False, scope=No
         final cell state,
     )
     """
-    if not _like_rnncell(cell):
+    if not _is_rnn_cell(cell):
         raise TypeError("cell must be an instance of RNNCell")
     if not callable(loop_fn):
         raise TypeError("loop_fn must be a callable")
@@ -37,7 +44,12 @@ def raw_rnn(cell, loop_fn, parallel_iterations=None, swap_memory=False, scope=No
     # determined by the parent scope, or is set to place the cached
     # Variable using the same placement as for the rest of the RNN.
     with vs.variable_scope(scope or "rnn") as varscope:
-        if context.in_graph_mode():
+        in_graph_mode_fn = getattr(context, "in_graph_mode", None)
+        if in_graph_mode_fn is not None:
+            in_graph_mode = in_graph_mode_fn()
+        else:
+            in_graph_mode = not context.executing_eagerly()
+        if in_graph_mode:
             if varscope.caching_device is None:
                 varscope.set_caching_device(lambda op: op.device)
 
@@ -158,7 +170,7 @@ def raw_rnn(cell, loop_fn, parallel_iterations=None, swap_memory=False, scope=No
             return (next_time, elements_finished, next_input, state_ta,
                     emit_ta, next_state, loop_state)
 
-        returned = control_flow_ops.while_loop(
+        returned = tf.while_loop(
             condition, body, loop_vars=[
                 time, elements_finished, next_input, state_ta,
                 emit_ta, state, loop_state],
@@ -195,7 +207,7 @@ def rnn_teacher_force(inputs, cell, sequence_length, initial_state, scope='dynam
         elements_finished = time >= sequence_length
         finished = math_ops.reduce_all(elements_finished)
 
-        next_input = control_flow_ops.cond(
+        next_input = tf.cond(
             finished,
             lambda: array_ops.zeros([array_ops.shape(inputs)[1], inputs.shape.as_list()[2]], dtype=dtypes.float32),
             lambda: inputs_ta.read(time)
@@ -233,7 +245,7 @@ def rnn_free_run(cell, initial_state, sequence_length, initial_input=None, scope
         )
         finished = math_ops.reduce_all(elements_finished)
 
-        next_input = control_flow_ops.cond(
+        next_input = tf.cond(
             finished,
             lambda: array_ops.zeros_like(initial_input),
             lambda: initial_input if cell_output is None else cell.output_function(next_cell_state)

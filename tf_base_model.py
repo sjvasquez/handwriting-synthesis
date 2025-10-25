@@ -7,9 +7,12 @@ import pprint as pp
 import time
 
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 from tf_utils import shape
+
+
+tf.disable_v2_behavior()
 
 
 class TFBaseModel(object):
